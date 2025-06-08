@@ -7,7 +7,7 @@ CORS(app)
 
 # Configure MongoDB connection
 client = MongoClient("mongodb://localhost:27017/")
-db = client["mlverse"]
+db = client["ML_VERSE"]
 users = db["users"]
 
 @app.route('/signup', methods=['POST'])
@@ -25,6 +25,7 @@ def signup():
 @app.route('/signin', methods=['POST'])
 def signin():
     data = request.get_json()
+    print("Received JSON data:", data)  # Debugging line
     email = data.get('email')
     password = data.get('password')
 

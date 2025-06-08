@@ -57,11 +57,9 @@ class _SignupScreenState extends State<SignupScreen> {
             context,
           ).showSnackBar(SnackBar(content: Text('Signup successful!')));
         } else {
-          await Future.delayed(Duration(milliseconds: 500));
-          await ApiService.logIN(_emailcontroller.text, _password.text);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Signin successful!')));
+          ScaffoldMessenger(
+            child: SnackBar(content: Text('Please fill all fields')),
+          );
         }
       } catch (e) {
         ScaffoldMessenger.of(
@@ -109,7 +107,6 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Stack(
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -135,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         boxText: 'Username',
                         hintText: 'Enter your username',
                         labelText: 'Username',
-                        controller: _emailcontroller,
+                        controller: _userName,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your username';
@@ -152,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         boxText: 'Mail Id',
                         hintText: 'Enter your mail id',
                         labelText: 'Mail Id',
-                        controller: _userName,
+                        controller: _emailcontroller,
                         validator: (value) => EmailValidator.validate(value),
                         width: screenWidth * 0.2,
                         height: screenHeight * 0.08,
@@ -204,16 +201,37 @@ class _SignupScreenState extends State<SignupScreen> {
                       width: screenWidth * 0.42,
                       buttonText: 'Sign up',
                       onPressed: () async {
-                        await Future.delayed(Duration(seconds: 3));
-                        _submitForm();
                         setState(() {
-                          _isloading = false;
+                          _isloading = true;
                         });
+                        try {
+                          await Future.delayed(Duration(seconds: 3));
+                          _submitForm();
+                          setState(() {
+                            _isloading = false;
+                          });
+                        } catch (e) {
+                          setState(() {
+                            _isloading = false;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Signup failed!')),
+                          );
+                        }
                       },
                     ),
                   ),
                 ],
               ),
+              _isloading
+                  ? Center(
+                    child: SizedBox(
+                      height: screenWidth * 0.4,
+                      width: screenWidth * 0.4,
+                      child: Lottie.asset('assets/loading_animation.json'),
+                    ),
+                  )
+                  : SizedBox.shrink(),
             ],
           ),
         ),
