@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ml_verse/DesktopHomePage.dart';
 import 'package:ml_verse/api/auth_api.dart';
 import 'package:ml_verse/auth/authTextFormWidget.dart';
+import 'package:ml_verse/function/appFunction.dart';
 import 'package:ml_verse/widgets/GlowButton.dart';
 import 'package:lottie/lottie.dart';
 
@@ -49,6 +51,7 @@ class _SignupScreenState extends State<SignupScreen> {
               )
               : print('animation falied');
           await ApiService.signUp(
+            context,
             _emailcontroller.text,
             _password.text,
             _confirmPassword.text,
@@ -207,6 +210,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         try {
                           await Future.delayed(Duration(seconds: 3));
                           _submitForm();
+                          await AppFunction.saveLoginStatus(
+                            true,
+                            _userName.text,
+                            _emailcontroller.text,
+                          );
                           setState(() {
                             _isloading = false;
                           });

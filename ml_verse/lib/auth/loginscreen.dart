@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:ml_verse/api/auth_api.dart';
 import 'package:ml_verse/auth/authTextFormWidget.dart';
+import 'package:ml_verse/function/appFunction.dart';
 import 'package:ml_verse/widgets/GlowButton.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -14,12 +15,14 @@ class SigninScreen extends StatefulWidget {
 
 class _SigninScreenState extends State<SigninScreen> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
 
   @override
   void initState() {
+    _usernameController;
     _emailcontroller;
     _password;
     _confirmPassword;
@@ -30,6 +33,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   void dispose() {
     super.dispose();
+    _usernameController.dispose();
     _emailcontroller;
     _password;
     _confirmPassword;
@@ -46,7 +50,7 @@ class _SigninScreenState extends State<SigninScreen> {
       body: Container(
         height: screenHeight,
         width: screenWidth,
-        margin: const EdgeInsets.symmetric(vertical: 65),
+        margin: const EdgeInsets.symmetric(vertical: 5),
         child: Form(
           key: _formkey,
           child: Stack(
@@ -83,7 +87,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
 
                   authTextFormCustom(
                     boxText: 'Mail Id',
@@ -91,6 +95,24 @@ class _SigninScreenState extends State<SigninScreen> {
                     labelText: 'Mail Id',
                     controller: _emailcontroller,
                     validator: (value) => EmailValidator.validate(value),
+                    width: screenWidth * 0.42,
+                    height: screenHeight * 0.08,
+                  ),
+                  SizedBox(height: 4),
+                  authTextFormCustom(
+                    boxText: 'userName',
+                    hintText: 'Enter your user name',
+                    labelText: 'Username',
+                    controller: _usernameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      if (value.length < 3) {
+                        return 'Username must be at least 3 characters';
+                      }
+                      return null;
+                    },
                     width: screenWidth * 0.42,
                     height: screenHeight * 0.08,
                   ),
@@ -146,8 +168,14 @@ class _SigninScreenState extends State<SigninScreen> {
                           try {
                             await ApiService.logIN(
                               context,
+                              _usernameController.text,
                               _emailcontroller.text,
                               _password.text,
+                            );
+                            await AppFunction.saveLoginStatus(
+                              true,
+                              _usernameController.text,
+                              _emailcontroller.text,
                             );
                           } catch (e) {
                             setState(() {
