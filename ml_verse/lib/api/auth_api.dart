@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import "package:ml_verse/DesktopHomePage.dart";
+import "package:ml_verse/auth/authScreen.dart";
 import "dart:convert";
 
 import "package:ml_verse/function/AppFunction.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class ApiService {
   static const String baseurl = "http://127.0.0.1:5000";
@@ -75,6 +77,24 @@ class ApiService {
     } catch (e) {
       debugPrint('Error during login: $e');
       throw Exception('Login failed: $e');
+    }
+  }
+
+  static Future<void> logOut(BuildContext context) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      if (context.mounted) {
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>  AuthScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error during logout: $e');
+      throw Exception('Logout failed: $e');
     }
   }
 }

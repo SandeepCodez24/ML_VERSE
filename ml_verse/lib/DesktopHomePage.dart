@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ml_verse/api/auth_api.dart';
+import 'package:ml_verse/screens/heroSection.dart';
 import 'package:ml_verse/widgets/GlowButton.dart';
 
 class DesktopHomePage extends StatefulWidget {
@@ -103,7 +105,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                         child: Container(
                           margin: const EdgeInsets.only(top: 5),
                           height: MediaQuery.of(context).size.height * 0.08,
-                          width: MediaQuery.of(context).size.width * 0.35,
+                          width: MediaQuery.of(context).size.width * 0.38,
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(16),
@@ -142,7 +144,23 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                                 ),
                               ),
                               const SizedBox(width: 10),
-
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStateProperty.all<Color>(
+                                          Colors.transparent,
+                                        ),
+                                  ),
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.settings,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
                               const SizedBox(width: 0.6),
                             ],
                           ),
@@ -199,11 +217,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
               ),
             ),
             // page2
-            Container(
-              height: MediaQuery.of(context).size.height * 0.7,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.green,
-            ),
+            heroSection(),
           ],
         ),
       ),

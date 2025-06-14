@@ -14,7 +14,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final bool _isSignIn = true;
   final int _currentIndex = 0;
 
   final PageController _pageController = PageController();
